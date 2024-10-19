@@ -6,6 +6,12 @@ import Image from 'next/image';
 
 const Navbar = () => {
 
+  const links = [
+    { label: 'Dashboard', href: '/dashboard' },
+    { label: 'Tickets', href: '/tickets' },
+    { label: 'Feeds', href: '/feeds' },
+];
+
     const [isInputFocused, setIsInputFocused] = useState(false);
     const inputRef = useRef(null);
 
@@ -40,16 +46,25 @@ const Navbar = () => {
       <ul
         tabIndex={0}
         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-        <li><a>Dashboard</a></li>
-        <li><a>Issues</a></li>
-        <li><a>Feeds</a></li>
+          {links.map((link) => (
+            <li key={link.href}>
+              <Link href={link.href} passHref legacyBehavior>
+                <a>{link.label}</a>
+              </Link>
+            </li>
+          ))}
       </ul>
     </div>
   </div>
   <div className="navbar-center hidden lg:flex">
     <ul className="menu menu-horizontal px-1">
-      <li><a>Dashboard</a></li>
-      <li><a>Issues</a></li>
+   { links.map((link) => (
+            <li key={link.href}>
+              <Link href={link.href} passHref legacyBehavior>
+                <a>{link.label}</a>
+              </Link>
+            </li>
+          ))}
       {/* <li>
         <details>
           <summary>Issues</summary>
@@ -59,7 +74,6 @@ const Navbar = () => {
           </ul>
         </details>
       </li> */}
-      <li><a>Feeds</a></li>
     </ul>
   </div>
   <div className="navbar-end">
