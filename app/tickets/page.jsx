@@ -1,11 +1,13 @@
-import React from 'react'
+import React, {Suspense} from 'react'
 import axios from 'axios'
 import { Flex, Badge, Text, Strong } from '@radix-ui/themes'
 import LoadingRings from '../components/loadingRings'
-import TicketStatusSelect from '../ticketStatusSelect'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import TicketStatusSelect from '../components/ticketStatusSelect'
 import NewTicketButton from '../components/newTicketButton'
 import TicketTable from '../components/ticketTable'
-import Pagination from './pagination'
+import Pagination from '../components/pagination'
 
 
 const Tickets = async () => {
@@ -28,18 +30,11 @@ const Tickets = async () => {
     )
     }
 
-    // if (isLoading) {
-    // return (
-    //     <div className="flex items-center justify-center min-h-screen">
-    //     <LoadingRings />
-    //     </div>
-    // )
-    // }
-
 
 
     return ( 
         <>
+         <ToastContainer />
         {
             console.log(tickets)
         }
@@ -73,7 +68,10 @@ const Tickets = async () => {
                         </div>
                     </div>
 
-                    
+                    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">
+                    <LoadingRings />
+                    </div>}>
+
                     {/* Display issues table */}
                     <TicketTable tickets={tickets} />
     
@@ -81,6 +79,8 @@ const Tickets = async () => {
                     <Flex justify="end">
                         <Pagination />
                     </Flex>
+
+                    </Suspense>
                 </div>
                 )}
         </>
