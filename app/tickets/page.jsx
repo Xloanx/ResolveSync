@@ -1,13 +1,14 @@
 import React, {Suspense} from 'react'
-import axios from 'axios'
+// import axios from 'axios'
 import { Flex, Badge, Text, Strong } from '@radix-ui/themes'
-import LoadingRings from '../components/loadingRings'
-import { ToastContainer } from 'react-toastify'
+// import LoadingRings from '../components/loadingRings'
+// import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import TicketStatusSelect from '../components/ticketStatusSelect'
+// import TicketStatusSelect from '../components/ticketStatusSelect'
 import NewTicketButton from '../components/newTicketButton'
-import TicketTable from '../components/ticketTable'
-import Pagination from '../components/pagination'
+// import TicketTable from '../components/ticketTable'
+// import Pagination from '../components/pagination'
+import TicketListingWrapper from '../components/ticketListingWrapper'
 
 
 const Tickets = async () => {
@@ -30,15 +31,17 @@ const Tickets = async () => {
     )
     }
 
-
+    const handleSelectedStatus = (status) => {
+        console.log(status)
+    }
 
     return ( 
         <>
-         <ToastContainer />
+         
         {
             console.log(tickets)
         }
-            <h2 className="font-mono text-2xl font-bold my-10">
+            <h2 className="font-mono text-2xl font-bold px-4 my-10">
                 Ticket Listing
             </h2>
 
@@ -57,31 +60,32 @@ const Tickets = async () => {
 
                         /* If there are tickets to display */
                 (
-                <div>
-                    {/* Display filters and new issue button */}
-                    <div className="flex justify-between items-center p-10">
-                        <div className="text-left">
-                            <TicketStatusSelect />
-                        </div>
-                        <div className="text-right">
-                           <NewTicketButton />
-                        </div>
-                    </div>
+                // <div>
+                //     {/* Display filters and new issue button */}
+                //     <div className="flex justify-between items-center p-10">
+                //         <div className="text-left">
+                //             <TicketStatusSelect onSendStatus={()=>handleSelectedStatus}/>
+                //         </div>
+                //         <div className="text-right">
+                //            <NewTicketButton />
+                //         </div>
+                //     </div>
 
-                    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">
-                    <LoadingRings />
-                    </div>}>
+                //     <Suspense fallback={<div className="flex items-center justify-center min-h-screen">
+                //     <LoadingRings />
+                //     </div>}>
 
-                    {/* Display issues table */}
-                    <TicketTable tickets={tickets} />
+                //     {/* Display issues table */}
+                //     <TicketTable tickets={tickets} />
     
-                    {/* Display pagination*/}
-                    <Flex justify="end">
-                        <Pagination />
-                    </Flex>
+                //     {/* Display pagination*/}
+                //     <Flex justify="end">
+                //         <Pagination tickets={tickets}/>
+                //     </Flex>
+                //     </Suspense>
+                // </div>
 
-                    </Suspense>
-                </div>
+                <TicketListingWrapper initialTickets={tickets} />
                 )}
         </>
     )}

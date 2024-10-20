@@ -13,7 +13,7 @@ import { Button,Dialog,Flex, Text, TextField, Callout, Spinner } from '@radix-ui
 import ErrorMessage from './errorMessage'
 import { createTicketSchema } from '../validationSchemas'
 
-const NewTicketButton = () => {
+const NewTicketButton = ({onTicketAdded}) => {
 
   const router = useRouter()
 
@@ -42,10 +42,11 @@ const NewTicketButton = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
+
+      const newTicket = await response.json();
+      onTicketAdded(newTicket)  // Call this after successful submission
       toast.success("Issue submitted successfully")
-      const result = await response.json();
-      console.log("Ticket created successfully:", result);
+      console.log("Ticket created successfully:", newTicket);
 
       // Reset form and close dialog
       reset()

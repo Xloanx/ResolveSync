@@ -1,8 +1,14 @@
 import React from 'react';
 import { Badge } from '@radix-ui/themes'
+import RecordSizeSelect from './recordSizeSelect';
 
 const TicketTable = ({ tickets }) => {
     return ( 
+        <div className='px-10'>
+        <div className="text-right">
+          <RecordSizeSelect dataSize={tickets.length}
+                            />  
+        </div>
         <div className="overflow-x-auto">
         <table className="table">
             {/* head */}
@@ -64,6 +70,7 @@ const TicketTable = ({ tickets }) => {
                 }
             </tbody>
         </table>
+    </div>
     </div>
      );
 }
