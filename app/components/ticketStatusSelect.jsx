@@ -1,7 +1,6 @@
 'use client'
-import React, {useState} from 'react';
-// import { useIssues } from '@/context/IssuesContext';
-import { Select, Button, Badge } from '@radix-ui/themes';
+import React from 'react';
+import { Select } from '@radix-ui/themes';
 
 const TicketStatusSelect = ({ onSendStatus, selectedStatus }) => {
   return (
