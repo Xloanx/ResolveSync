@@ -43,6 +43,7 @@ const TicketListingWrapper = () => {
   };
 
   const handleAddTicket = (newTicket) => {
+    console.log("inside handleAddTicket", newTicket);
     updateTicket(newTicket); // Assuming updateTicket can handle adding new tickets
   };
 

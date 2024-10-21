@@ -3,10 +3,8 @@
 import React, {useState} from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-// import {z} from 'zod'
 import { useRouter } from 'next/navigation'
-import { ToastContainer, toast } from 'react-toastify'
-import axios from 'axios'
+import { toast } from 'react-toastify'
 import SimpleMDE from "react-simplemde-editor"
 import "easymde/dist/easymde.min.css"
 import { Button,Dialog,Flex, Text, TextField, Callout, Spinner } from '@radix-ui/themes'
@@ -44,7 +42,7 @@ const NewTicketButton = ({onTicketAdded}) => {
       }
 
       const newTicket = await response.json();
-      onTicketAdded(newTicket)  // Call this after successful submission
+      onTicketAdded(newTicket)  // Call this after successful submission to update UI table
       toast.success("Issue submitted successfully")
       console.log("Ticket created successfully:", newTicket);
 
