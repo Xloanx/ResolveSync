@@ -1,9 +1,9 @@
 import React from 'react';
 import { Badge } from '@radix-ui/themes'
-import RecordSizeSelect from './recordSizeSelect';
 
-const TicketTable = ({ filteredTickets }) => {
-    const reversedTicketArray = filteredTickets.slice().reverse()
+const TicketTable = ({ paginatedAndFilteredTickets,selectedPage, selectedRecordSize }) => {
+    const filteredPaginatedAndReversedArray = paginatedAndFilteredTickets.slice().reverse()
+    if (selectedRecordSize === "Record Size") selectedRecordSize = 10 //needs a number for computation purpose
 
     return ( 
         <div className='px-10'>
@@ -20,10 +20,10 @@ const TicketTable = ({ filteredTickets }) => {
                     </thead>
                     <tbody>
                         {
-                        reversedTicketArray.map((ticket, index) => (
+                        filteredPaginatedAndReversedArray.map((ticket, index) => (
                         <tr className="hover font-sans text-base" 
                             key={index}>
-                            <th>{index+1}</th>
+                            <th> {(selectedPage - 1) * selectedRecordSize + (index + 1)}</th>
                             <td>
                                 {/* Ticket Details Drawer */}
                                 {/* <Ticket Drawer ticketTitle = {ticket.title}/> */}

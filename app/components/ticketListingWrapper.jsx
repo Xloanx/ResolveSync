@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Text, Strong } from '@radix-ui/themes'
 import { useTickets } from '../tickets/ticketsContext'
+import { Paginate } from '../utils/paginate'
 import TicketStatusSelect from './ticketStatusSelect'
 import RecordSizeSelect from './recordSizeSelect'
 import NewTicketButton from './newTicketButton'
@@ -14,8 +15,9 @@ const TicketListingWrapper = () => {
   const { tickets, updateTicket } = useTickets();
   const [filteredTickets, setFilteredTickets] = useState(tickets);
   const [selectedStatus, setSelectedStatus] = useState('ALL');
-  const [selectedRecordSize, setSelectedRecordSize] = useState("Record Size");
+  let [selectedRecordSize, setSelectedRecordSize] = useState("Record Size");
   const [selectedPage, setSelectedPage] = useState(1);
+  const [paginatedData, setPaginatedData] = useState([])
 
   useEffect(() => {
     if (selectedStatus === 'ALL') {
@@ -25,26 +27,31 @@ const TicketListingWrapper = () => {
     }
   }, [selectedStatus, tickets]);
 
-  const handleStatusChange = (ticketId, newStatus) => {
-    const updatedTicket = tickets.find(ticket => ticket.id === ticketId);
-    if (updatedTicket) {
-      updateTicket({ ...updatedTicket, status: newStatus });
-    }
-  };
+
+  
+useEffect(() => {
+  if (selectedRecordSize === "Record Size") selectedRecordSize = 10 //needs a number for computation purpose
+  setPaginatedData(Paginate(filteredTickets, selectedPage, selectedRecordSize))
+}, [filteredTickets, selectedPage, selectedRecordSize])
+
+  // const handleStatusChange = (ticketId, newStatus) => {
+  //   const updatedTicket = tickets.find(ticket => ticket.id === ticketId);
+  //   if (updatedTicket) {
+  //     updateTicket({ ...updatedTicket, status: newStatus });
+  //   }
+  // };
 
   const handleRecordSizeChange = (newRecordSize) => {
     setSelectedRecordSize(newRecordSize);
-    console.log('Selected record size:', newRecordSize);
   }
 
   const handleSelectedStatus = (status) => {
     setSelectedStatus(status);
-    console.log('Selected status:', status);
+    setSelectedPage(1); //necessary to reset page to 1 when a new status is selected
   };
 
   const handleAddTicket = (newTicket) => {
-    console.log("inside handleAddTicket", newTicket);
-    updateTicket(newTicket); // Assuming updateTicket can handle adding new tickets
+    updateTicket(newTicket); 
   };
 
   return (
@@ -94,8 +101,10 @@ const TicketListingWrapper = () => {
           </div>
           
           <TicketTable 
-            filteredTickets={filteredTickets} 
-            handleStatusChange={handleStatusChange}
+            paginatedAndFilteredTickets={paginatedData}
+            selectedPage={selectedPage}
+            selectedRecordSize={selectedRecordSize}
+            // handleStatusChange={handleStatusChange}
           />
           <Flex justify="end">
             <Pagination 
