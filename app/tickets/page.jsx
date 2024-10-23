@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, Strong } from '@radix-ui/themes'
 import 'react-toastify/dist/ReactToastify.css'
-import TicketListingWrapper from '../components/ticketListingWrapper'
+import TicketListingWrapper from './components/ticketListingWrapper'
 import { TicketsProvider } from './ticketsContext'
 
 
