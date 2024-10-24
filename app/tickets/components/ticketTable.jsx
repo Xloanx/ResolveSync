@@ -1,28 +1,19 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { Badge } from '@radix-ui/themes'
-import TicketDrawer  from './ticketDrawer';
+import TicketDetails  from './ticketDetails';
 import { Paginate } from '../../utils/paginate'
 
-const TicketTable = ({ filteredTickets,selectedPage, selectedRecordSize, onTicketDeleted}) => {
-    const [selectedTicket, setSelectedTicket] = useState(null);
-    const [paginatedData, setPaginatedData] = useState([])
+const TicketTable = ({ filteredTickets,selectedPage, selectedRecordSize }) => {
     
     const filteredAndReversedArray = filteredTickets.slice().reverse()
     if (selectedRecordSize === "Record Size") selectedRecordSize = 10 //needs a number for computation purpose
 
-    // const handleTicketClick = (ticket) => {
-    //     console.log(ticket)
-    //     setSelectedTicket(ticket);
-    //     // document.getElementById('ticket-drawer').checked = true;
-    //     return <TicketDrawer ticket={selectedTicket} 
-    //                             onTicketDeleted={onTicketDeleted} />
-    // };
-
-    useEffect(() => {
-        // if (selectedRecordSize === "Record Size") selectedRecordSize = 10 //needs a number for computation purpose
-        setPaginatedData(Paginate(filteredAndReversedArray, selectedPage, selectedRecordSize))
-      }, [filteredAndReversedArray, selectedPage, selectedRecordSize])
+      const paginatedData = Paginate(
+        filteredAndReversedArray,
+        selectedPage,
+        selectedRecordSize
+    );
 
 
     return ( 
@@ -45,23 +36,7 @@ const TicketTable = ({ filteredTickets,selectedPage, selectedRecordSize, onTicke
                             key={ticket.id}>
                             <th> {(selectedPage - 1) * selectedRecordSize + (index + 1)}</th>
                             <td>
-                                {/* {ticket.title} */}
-                                <span 
-                                    className="cursor-pointer"
-                                    onClick={() => setSelectedTicket(ticket)}>
-                                    {ticket.title}
-                                </span>
-                                {/* <label 
-                                    htmlFor="ticket-drawer" 
-                                    className="cursor-pointer"
-                                    onClick={() => handleTicketClick(ticket)}>
-                                
-                                    {ticket.title}
-                                </label> */}
-                                {/* { selectedTicket &&
-                                <TicketDrawer ticket={ticket} onTicketDeleted={onTicketDeleted} />} */}
-
-                               
+                                <TicketDetails ticket={ticket} />
                             </td>
                             <td>
                                 <Badge 
@@ -79,14 +54,6 @@ const TicketTable = ({ filteredTickets,selectedPage, selectedRecordSize, onTicke
                     </tbody>
                 </table>
             </div>
-            {selectedTicket &&
-                <TicketDrawer 
-                    ticket={selectedTicket}
-                    onTicketDeleted={onTicketDeleted}
-                />
-                }
-
-{selectedTicket && <TicketDrawer ticket={selectedTicket} />}
         </div>
      );
 }
