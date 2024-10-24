@@ -10,14 +10,15 @@ export const TicketsProvider = ({ children, initialTickets }) => {
   const [tickets, setTickets] = useState(initialTickets);
 
   const updateTicket = (updatedTicket) => {
-    console.log("inside updateTicket", updatedTicket);
-    // setTickets(currentTickets => 
-    //   currentTickets.map(ticket => 
-    //     ticket.id === updatedTicket.id ? updatedTicket : ticket
-    //   )
-    // );
+
     setTickets(currentTickets => {
         const existingTicketIndex = currentTickets.findIndex(ticket => ticket.id === updatedTicket.id);
+        
+        if (updatedTicket.isDeleted) {
+          // Remove deleted ticket
+          return currentTickets.filter(ticket => ticket.id !== updatedTicket.id);
+      }
+        
         if (existingTicketIndex !== -1) {
           // Update existing ticket
           return currentTickets.map(ticket => 
