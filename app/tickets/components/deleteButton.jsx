@@ -6,16 +6,13 @@ import { AlertDialog, Flex, Button, Spinner, Callout, Text } from "@radix-ui/the
 import { useTickets } from '../ticketsContext'
 
 const DeleteButton = ({ ticketId, onDeleteSuccess }) => {
-  const { tickets, updateTicket } = useTickets();
+  const { updateTicket } = useTickets();
   const [error, setError] = useState("");
   const [isDeleting, setDeleting] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false)
 
   const router = useRouter();
 
-    const handleTicketDelete = (deletedTicket) => {
-    updateTicket(deletedTicket); 
-  };
 
   const handleDeleteTicket = async () =>{
     try {
@@ -34,11 +31,17 @@ const DeleteButton = ({ ticketId, onDeleteSuccess }) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
+      // Update the tickets context to remove the deleted ticket
+      updateTicket({ id: ticketId, isDeleted: true })
       toast.success("Ticket deleted successfully")
-      handleTicketDelete(ticketId) //update the UI after successful deletion
-      onDeleteSuccess();
-      //setDialogOpen(false)
-      router.refresh();
+      
+      //close dialog and drawer
+      setDialogOpen(false)
+      
+      if (onDeleteSuccess) {
+        onDeleteSuccess(); // This will now trigger both drawer close and page refresh
+      }
+      
     } catch (error) {
       setError(error.message || "An unexpected error occurred")
       toast.error("Failed to delete ticket: " + error.message)

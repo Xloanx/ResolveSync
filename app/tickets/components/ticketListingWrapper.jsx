@@ -27,16 +27,6 @@ const TicketListingWrapper = () => {
   }, [selectedStatus, tickets]);
 
 
-  
-
-
-  // const handleStatusChange = (ticketId, newStatus) => {
-  //   const updatedTicket = tickets.find(ticket => ticket.id === ticketId);
-  //   if (updatedTicket) {
-  //     updateTicket({ ...updatedTicket, status: newStatus });
-  //   }
-  // };
-
   const handleRecordSizeChange = (newRecordSize) => {
     setSelectedRecordSize(newRecordSize);
   }
@@ -50,9 +40,7 @@ const TicketListingWrapper = () => {
     updateTicket(newTicket); 
   };
 
-  const handleTicketDeleted = (deletedTicket) => {
-    updateTicket(deletedTicket); 
-  };
+
 
   return (
     <>
@@ -104,8 +92,6 @@ const TicketListingWrapper = () => {
             filteredTickets={filteredTickets}
             selectedPage={selectedPage}
             selectedRecordSize={selectedRecordSize}
-            onTicketDeleted={handleTicketDeleted}
-            // handleStatusChange={handleStatusChange}
           />
           <Flex justify="end">
             <Pagination 

@@ -15,7 +15,15 @@ const SideDrawer = ({   caller,
   const [isDragging, setIsDragging] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(width);
 
- 
+   // Add this function to pass down to children
+   const handleClose = () => {
+    setIsOpen(false);
+  };
+
+    // Modify the content rendering to pass down the close handler
+    const contentWithProps = React.isValidElement(content)
+    ? React.cloneElement(content, { onDrawerClose: handleClose })
+    : content;
 
   const handleDragStart = (e) => {
     e.preventDefault();
@@ -135,7 +143,7 @@ const defaultContent = (
 
             {/* Scrollable content area */}
             <div className="flex-1 overflow-y-auto p-4">
-                {content || defaultContent}
+                {contentWithProps || defaultContent}
             </div>
         </div>
         </div>

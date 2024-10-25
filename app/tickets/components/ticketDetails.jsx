@@ -16,7 +16,7 @@ import TicketStatusSelect from './ticketStatusSelect'
 import TicketPriority from './ticketPriority'
 import DeleteButton from './deleteButton'
 
-const TicketDetails = ({ ticket }) => {
+const TicketDetails = ({ ticket, onDrawerClose }) => {
   
 
   const router = useRouter()
@@ -54,10 +54,10 @@ const TicketDetails = ({ ticket }) => {
       setMdeValue(value);
     };
 
-  const handleDeleteSuccess = () => {
-      setDialogOpen(false); // Close the dialog
-      router.refresh(); // Refresh the page or update the UI
-  }
+    const handleDeleteSuccess = () => {
+      if (onDrawerClose) onDrawerClose(); // Close the drawer
+      router.refresh(); // Refresh the page
+    };
  
 
   useEffect(() => {
@@ -70,7 +70,7 @@ const TicketDetails = ({ ticket }) => {
       }
   }, [ticket]);
 
-console.log(ticketStatus)
+
   const onSubmit = async (ticketData) => {
     try {
       setSubmitting(true)
@@ -166,7 +166,8 @@ console.log(ticketStatus)
 
         <div className="flex justify-between items-center">
         <div className="text-left">
-            <DeleteButton ticketId={ticket.id} onDeleteSuccess={handleDeleteSuccess}/>
+            <DeleteButton ticketId={ticket.id} 
+            onDeleteSuccess={handleDeleteSuccess}/>
         </div>
 
         <div className="text-right">
