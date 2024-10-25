@@ -7,82 +7,70 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import SimpleMDE from "react-simplemde-editor"
 import "easymde/dist/easymde.min.css"
-import { Button,Dialog,Flex, Text, TextField, Callout, Spinner } from '@radix-ui/themes'
+import { Button,Flex, Text, TextField, Callout, Spinner } from '@radix-ui/themes'
 import ErrorMessage from '../../components/errorMessage'
 import { updateTicketSchema } from '../../utils/validationSchemas'
-
+// import MultiSelect  from '../../components/multiSelect'
 import AssigneeSelect from './assigneeSelect'
 import TicketStatusSelect from './ticketStatusSelect'
 import TicketPriority from './ticketPriority'
 import DeleteButton from './deleteButton'
 
+const TicketDetails = ({ ticket }) => {
+  
 
+  const router = useRouter()
+  const ticketId = ticket.id
 
-import {z} from 'zod';
-import EditButton from './editButton';
+  const [assignee, setAssignee] = useState(ticket?.assignee || "Assignee");
+  const [ticketStatus, setTicketStatus] = useState(ticket?.status || "Ticket Status");
+  const [ticketPriority, setTicketPriority] = useState(ticket?.priority || "Ticket Priority");
+  const [title, setTitle] = useState(ticket?.title || "");
+  const [mdeValue, setMdeValue] = useState(ticket?.description || "");
+  const [error, setError] = useState("")
+  const [isSubmitting, setSubmitting] = useState(false)
+  
+  const { register, control, handleSubmit, formState:{errors}, reset } = useForm({
+      resolver: zodResolver(updateTicketSchema)
+  })
 
+  const handleAssigneeChange = (e) =>{
+      setAssignee(e);
+  }
 
-const TicketDetails = ({ticket}) => {
+  const handleStatusChange = (e) =>{
+      setTicketStatus(e);
+  }
 
-    const router = useRouter()
-    const ticketId = ticket.id
+  const handlePriorityChange = (e) =>{
+      setTicketPriority(e);
+  }
 
-    const [assignee, setAssignee] = useState("Assignee");
-    const [ticketStatus, setTicketStatus] = useState("Ticket Status");
-    const [ticketPriority, setTicketPriority] = useState("Ticket Priority");
-    // const [ticket, setTicket] = useState({});
-    const [title, setTitle] = useState("")
-    const [mdeValue, setMdeValue] = useState("");
+  const handleTitleChange = (e) =>{
+      setTitle(e)
+  }
 
-    const [error, setError] = useState("")
-    const [dialogOpen, setDialogOpen] = useState(false)
-    const [isSubmitting, setSubmitting] = useState(false)
-    
-    const { register, control, handleSubmit, formState:{errors}, reset } = useForm({
-        resolver: zodResolver(updateTicketSchema)
-    })
+  const handleMdeValueChange = (value) => {
+      setMdeValue(value);
+    };
 
-    const handleAssigneeChange = (e) =>{
-        setAssignee(e);
-    }
+  const handleDeleteSuccess = () => {
+      setDialogOpen(false); // Close the dialog
+      router.refresh(); // Refresh the page or update the UI
+  }
+ 
 
-    const handleStatusChange = (e) =>{
-        setTicketStatus(e);
-    }
+  useEffect(() => {
+      if (ticket) {
+          setAssignee(ticket.assignee);
+          setTicketStatus(ticket.status);
+          setTicketPriority(ticket.priority);
+          setTitle(ticket.title);
+          setMdeValue(ticket.description);
+      }
+  }, [ticket]);
 
-    const handlePriorityChange = (e) =>{
-        setTicketPriority(e);
-    }
-
-    const handleTitleChange = (e) =>{
-        setTitle(e)
-    }
-
-    const handleMdeValueChange = (value) => {
-        setMdeValue(value);
-      };
-
-    const handleDeleteSuccess = () => {
-        setDialogOpen(false); // Close the dialog
-        router.refresh(); // Refresh the page or update the UI
-    }
-   
-
-    useEffect(() => {
-        if (ticket) {
-            setAssignee(ticket.assignee || "Assignee");
-            setTicketStatus(ticket.status || "Ticket Status");
-            setTicketPriority(ticket.priority || "Ticket Priority");
-            setTitle(ticket.title || "");
-            setMdeValue(ticket.description || "");
-        }
-    }, [ticket]);
-    
-
-
-
-
-
+console.log(ticketStatus)
   const onSubmit = async (ticketData) => {
     try {
       setSubmitting(true)
@@ -116,91 +104,72 @@ const TicketDetails = ({ticket}) => {
       setSubmitting(false)
   }
 }
+  
 
-    return ( 
-        <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
-        <Dialog.Trigger>
-            <span 
-                className="cursor-pointer"
-                onClick={() => setDialogOpen(true)}>
-                {ticket.title}
-            </span>
-          {/* <Button onClick={() => setDialogOpen(true)}>Create New Ticket</Button> */}
-        </Dialog.Trigger>
-  
-        <Dialog.Content style={{ maxWidth: '40%', maxHeight: '80vh', overflow: 'auto' }}>
-          <Dialog.Title>Ticket Details</Dialog.Title>
-          <Dialog.Description size="2" mb="4">
-            <Text>  Ticket ID: {ticket.id} </Text> 
-          </Dialog.Description>
-  
-          <form 
-          onSubmit={handleSubmit(onSubmit)} 
-          className='space-y-4'>
-          { error && (
-              <Callout.Root color="red" className="mb-5">
-                <Callout.Text>
-                  {error}
-                </Callout.Text>
-              </Callout.Root>
-            )}
+  return (
+    <div className="px-4">
 
-           
-          <Flex direction="column" gap="3"> 
+        <div className='pb-4'>
+            <Text>  Ticket ID: {ticket.id} </Text>
+        </div>
 
-            <AssigneeSelect ticketId={ticket.id} />
-            <ErrorMessage> {errors.assignee?.message} </ErrorMessage>
+        <form 
+        onSubmit={handleSubmit(onSubmit)} 
+        className='space-y-4'>
+        { error && (
+            <Callout.Root color="red" className="mb-5">
+            <Callout.Text>
+                {error}
+            </Callout.Text>
+            </Callout.Root>
+        )}
 
-            <div className="flex justify-between items-center">
-                <div className="text-left">
-                    <TicketStatusSelect onSendStatus={handleStatusChange}  
-                                        selectedStatus={ticketStatus} />
-                </div>
-                <div className="text-right">
-                <TicketPriority onSendPriority={handlePriorityChange}  
-                                selectedPriority={ticketPriority} />
-                </div>
-            </div>
-         
-  
-          
-          <TextField.Root placeholder="Title" 
-                        value={title}
-                        onChange={handleTitleChange}
-                        {...register('title', { minLength: 1 })} />
-  
-          <ErrorMessage> {errors.title?.message} </ErrorMessage>
-  
-          <Controller
-            name="description"
-            control={control}
-            render={({ field }) => (
-                <SimpleMDE placeholder="Description of Issue…"
-                                onChange={handleMdeValueChange}
-                                value={mdeValue} 
-                                field = {...field}/>
-            )}
-          />
-          <ErrorMessage> {errors.description?.message} </ErrorMessage>
-          </Flex>
-  
-          
+        
+        <Flex direction="column" gap="3"> 
+        {/* <MultiSelect /> */}
+        <AssigneeSelect />
+        <ErrorMessage> {errors.assignee?.message} </ErrorMessage>
 
-          {/* <Flex gap="3" className='justify-between' > */}
         <div className="flex justify-between items-center">
-          <div className="text-left">
+            <div className="text-left">
+                <TicketStatusSelect onSendStatus={handleStatusChange}  
+                                    selectedStatus={ticketStatus} />
+            </div>
+            <div className="text-right">
+            <TicketPriority onSendPriority={handlePriorityChange}  
+                            selectedPriority={ticketPriority} />
+            </div>
+        </div>
+
+
+
+        <TextField.Root placeholder="Title" 
+                    value={title}
+                    onChange={handleTitleChange}
+                    {...register('title', { minLength: 1 })} />
+
+        <ErrorMessage> {errors.title?.message} </ErrorMessage>
+
+        <Controller
+        name="description"
+        control={control}
+        render={({ field }) => (
+            <SimpleMDE placeholder="Description of Issue…"
+                      style={{ maxHeight: "250px", overflow: "auto" }}
+                            onChange={handleMdeValueChange}
+                            value={mdeValue} 
+                            field = {...field}/>
+        )}
+        />
+        <ErrorMessage> {errors.description?.message} </ErrorMessage>
+        </Flex>
+
+        <div className="flex justify-between items-center">
+        <div className="text-left">
             <DeleteButton ticketId={ticket.id} onDeleteSuccess={handleDeleteSuccess}/>
-          </div>
+        </div>
 
-          <div className="text-right">
-            <Dialog.Close>
-                <Button variant="soft" color="gray">
-                    Cancel
-                </Button>
-            </Dialog.Close>
-
-            
-    
+        <div className="text-right">
             <Button type="submit"  radius="small" size='2' disabled={isSubmitting}>
                 {
                     isSubmitting ? 
@@ -209,15 +178,14 @@ const TicketDetails = ({ticket}) => {
                 }
             </Button>
             
-          </div>
         </div>
-            
-  
-          {/* </Flex> */}
-          </form>
-        </Dialog.Content>
-      </Dialog.Root>
-     );
-}
- 
+        </div>
+        
+        </form>
+    </div>
+    );
+          
+    
+};
+
 export default TicketDetails;

@@ -1,7 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { Badge } from '@radix-ui/themes'
-import TicketDetails  from './ticketDetails';
+import TicketDetails from './ticketDetails';
+import SideDrawer from '../../components/sideDrawer'
 import { Paginate } from '../../utils/paginate'
 
 const TicketTable = ({ filteredTickets,selectedPage, selectedRecordSize }) => {
@@ -9,6 +10,7 @@ const TicketTable = ({ filteredTickets,selectedPage, selectedRecordSize }) => {
     const filteredAndReversedArray = filteredTickets.slice().reverse()
     if (selectedRecordSize === "Record Size") selectedRecordSize = 10 //needs a number for computation purpose
 
+    console.log(selectedRecordSize)
       const paginatedData = Paginate(
         filteredAndReversedArray,
         selectedPage,
@@ -36,7 +38,10 @@ const TicketTable = ({ filteredTickets,selectedPage, selectedRecordSize }) => {
                             key={ticket.id}>
                             <th> {(selectedPage - 1) * selectedRecordSize + (index + 1)}</th>
                             <td>
-                                <TicketDetails ticket={ticket} />
+                                <SideDrawer caller={ticket.title} 
+                                            header = "Ticket Details"
+                                            content = {< TicketDetails ticket={ticket}/>}
+                                />
                             </td>
                             <td>
                                 <Badge 
