@@ -10,7 +10,7 @@ const Tickets = async () => {
     // Fetch tickets server-side
     let tickets = []
     try {
-        const response = await fetch('http://localhost:3000/api/tickets', { cache: 'no-store' })
+        const response = await fetch(`${process.env.API_URL}/api/tickets`, { cache: 'no-store' })
         if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -42,26 +42,6 @@ const Tickets = async () => {
           </>
         )
       }
-
-
-
-    // const handleSelectedStatus = (status) => {
-    //     console.log(status)
-    // }
-
-    // return ( 
-    //     <>
-    //         <h2 className="font-mono text-2xl font-bold px-4 my-10">
-    //             Ticket Listing
-    //         </h2>
-
-    //         {/**Wraps the content of this page so that this page can maitain its SSR state 
-    //          * while the TicketListingWrapper component takes care of interactivity
-    //         */}
-    //         <TicketListingWrapper initialTickets={tickets} />
-              
-    //     </>
-    // )}
 
  
 export default Tickets

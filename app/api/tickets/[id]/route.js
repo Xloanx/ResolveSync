@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "../../../../prisma/client"
-import { createTicketSchema } from "../../../utils/validationSchemas"
+import { updateTicketSchema } from "../../../utils/validationSchemas"
 
 
 
@@ -58,35 +58,59 @@ export async function DELETE(NextRequest, { params }) {
 
 
 // PATCH request function for updating ticket
-export async function PATCH(NextRequest, { params }) {
-    const { ticketId } = params;
-    const body = await NextRequest.json();
+export async function PUT(NextRequest, { params }) {
+    try{
+        const ticketId = parseInt(params.id);
+        const body = await NextRequest.json();
 
-    const validation = createTicketSchema.safeParse(body);
+    const validation = updateTicketSchema.safeParse(body);
     if (!validation.success) {
-        return NextResponse.json(validation.error.errors, { status: 400 });
+        return NextResponse.json(
+            {error: validation.error.errors}, 
+            { status: 400 }
+        );
     }
 
-    try {
-        const ticket = await prisma.ticket.findUnique({
-            where: { id: Number(ticketId) },
-        });
+    // First, get existing documents
+    const existingTicket = await prisma.ticket.findUnique({
+        where: { id: ticketId },
+        include: { documents: true }
+      });
+  
+      if (!existingTicket) {
+        return NextResponse.json(
+          { error: 'Ticket not found' },
+          { status: 404 }
+        );
+      }
 
-        if (!ticket) {
-            return NextResponse.json({ message: "Ticket not found" }, { status: 404 });
+      // Update ticket with new documents
+    const updatedTicket = await prisma.ticket.update({
+        where: { id: ticketId },
+        data: {
+          title: body.title,
+          description: body.description,
+          assignee: body.assignee,
+          status: body.status,
+          priority: body.priority,
+          documents: {
+            deleteMany: {}, // Remove all existing documents
+            create: body.documents?.map(url => ({ url })) || [] // Create new ones
+          }
+        },
+        include: {
+          documents: true
         }
+      });
 
-        const updatedTicket = await prisma.ticket.update({
-            where: { id: Number(ticketId) },
-            data: {
-                title: body.title,
-                description: body.description,
-            },
-        });
+      return NextResponse.json(updatedTicket);
 
-        return NextResponse.json(updatedTicket, { status: 200 });
-    } catch (error) {
-        console.error("Error updating ticket:", error);
-        return NextResponse.json({ message: "Server Error" }, { status: 500 });
-    }
+  } catch (error) {
+    console.error('Failed to update ticket:', error);
+    return NextResponse.json(
+      { error: 'Failed to update ticket' },
+      { status: 500 }
+    );
+
+  }
 }

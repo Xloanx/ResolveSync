@@ -10,7 +10,7 @@ const TicketTable = ({ filteredTickets,selectedPage, selectedRecordSize }) => {
     const filteredAndReversedArray = filteredTickets.slice().reverse()
     if (selectedRecordSize === "Record Size") selectedRecordSize = 10 //needs a number for computation purpose
 
-    console.log(selectedRecordSize)
+
       const paginatedData = Paginate(
         filteredAndReversedArray,
         selectedPage,
@@ -34,7 +34,7 @@ const TicketTable = ({ filteredTickets,selectedPage, selectedRecordSize }) => {
                     <tbody>
                         {
                         paginatedData.map((ticket, index) => (
-                        <tr className="hover font-sans text-base" 
+                        <tr className="hover font-sans text-base h-10" 
                             key={ticket.id}>
                             <th> {(selectedPage - 1) * selectedRecordSize + (index + 1)}</th>
                             <td>
