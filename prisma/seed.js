@@ -153,197 +153,401 @@ async function main() {
     },
   });
 
-
-
-  // Seed Issues
-  const issue1Description = await fetchLoremIpsum();
-  const issue2Description = await fetchLoremIpsum();
-  const issue3Description = await fetchLoremIpsum();
-  const issue4Description = await fetchLoremIpsum();
-  const issue5Description = await fetchLoremIpsum();
-  const issue6Description = await fetchLoremIpsum();
-  const issue7Description = await fetchLoremIpsum();
-  const issue8Description = await fetchLoremIpsum();
-  const issue9Description = await fetchLoremIpsum();
-  const issue10Description = await fetchLoremIpsum();
-  const issue11Description = await fetchLoremIpsum();
-  const issue12Description = await fetchLoremIpsum();
-  const issue13Description = await fetchLoremIpsum();
-  const issue14Description = await fetchLoremIpsum();
-  const issue15Description = await fetchLoremIpsum();
-  const issue16Description = await fetchLoremIpsum();
-  const issue17Description = await fetchLoremIpsum();
-  const issue18Description = await fetchLoremIpsum();
-  const issue19Description = await fetchLoremIpsum();
-  const issue20Description = await fetchLoremIpsum();
-
-  await prisma.ticket.create({
+  const user17 = await fetchRandomUser();
+  const createdUser17 = await prisma.user.create({
     data: {
-      title: 'First Issue',
-      description: issue1Description,
-      reporterId: createdUser2.id,
+      ...user17,
+      role: 'AGENT',
     },
   });
 
-  await prisma.ticket.create({
+  const user18 = await fetchRandomUser();
+  const createdUser18 = await prisma.user.create({
     data: {
-      title: 'Second Issue',
-      description: issue2Description,
-      reporterId: createdUser8.id,
+      ...user18,
+      role: 'AGENT',
     },
   });
 
-  await prisma.ticket.create({
+  const user19 = await fetchRandomUser();
+  const createdUser19 = await prisma.user.create({
     data: {
-      title: 'First Issue',
-      description: issue3Description,
-      reporterId: createdUser9.id,
+      ...user19,
+      role: 'AGENT',
     },
   });
 
-  await prisma.ticket.create({
+  const user20 = await fetchRandomUser();
+  const createdUser20 = await prisma.user.create({
     data: {
-      title: 'Second Issue',
-      description: issue4Description,
-      reporterId: createdUser2.id,
+      ...user20,
+      role: 'AGENT',
     },
   });
 
-  await prisma.ticket.create({
-    data: {
-      title: 'First Issue',
-      description: issue5Description,
-      reporterId: createdUser12.id,
-      status: 'RESOLVED',
-      priority: 'MEDIUM',
-      assignedToId: createdUser5.id,
-    },
-  });
+  console.log('Users created:', createdUser1, createdUser2, createdUser3, createdUser4, createdUser5, 
+                                createdUser6, createdUser7, createdUser8, createdUser9, createdUser10,
+                                createdUser11, createdUser12, createdUser13, createdUser14, createdUser15,
+                                createdUser16, createdUser17, createdUser18, createdUser19, createdUser20,
+                              );
 
-  await prisma.ticket.create({
-    data: {
-      title: 'Second Issue',
-      description: issue6Description,
-      reporterId: createdUser8.id,
-    },
-  });
+  // Seed tickets
+  const ticket1Description = await fetchLoremIpsum();
+  const ticket2Description = await fetchLoremIpsum();
+  const ticket3Description = await fetchLoremIpsum();
+  const ticket4Description = await fetchLoremIpsum();
+  const ticket5Description = await fetchLoremIpsum();
+  const ticket6Description = await fetchLoremIpsum();
+  const ticket7Description = await fetchLoremIpsum();
+  const ticket8Description = await fetchLoremIpsum();
+  const ticket9Description = await fetchLoremIpsum();
+  const ticket10Description = await fetchLoremIpsum();
+  const ticket11Description = await fetchLoremIpsum();
+  const ticket12Description = await fetchLoremIpsum();
+  const ticket13Description = await fetchLoremIpsum();
+  const ticket14Description = await fetchLoremIpsum();
+  const ticket15Description = await fetchLoremIpsum();
+  const ticket16Description = await fetchLoremIpsum();
+  const ticket17Description = await fetchLoremIpsum();
+  const ticket18Description = await fetchLoremIpsum();
+  const ticket19Description = await fetchLoremIpsum();
+  const ticket20Description = await fetchLoremIpsum();
 
-  await prisma.ticket.create({
-    data: {
-      title: 'First Issue',
-      description: issue7Description,
-      reporterId: createdUser15.id,
-    },
-  });
-
-  await prisma.ticket.create({
-    data: {
-      title: 'Second Issue',
-      description: issue8Description,
-      reporterId: createdUser3.id,
-    },
-  });
-
-  await prisma.ticket.create({
-    data: {
-      title: 'First Issue',
-      description: issue9Description,
-      reporterId: createdUser9.id,
-    },
-  });
-
-  await prisma.ticket.create({
+  const t1 = await prisma.ticket.create({
     data: {
       title: 'Faulty UI',
-      description: issue10Description,
+      description: ticket1Description,
+      reporter: {
+        connect: {
+          id: createdUser2.id, // Assuming user1 was created earlier
+        },
+      },
+    },
+  });
+
+  const t2 = await prisma.ticket.create({
+    data: {
+      title: 'Broken DB',
+      description: ticket2Description,
+      reporter: {
+        connect: {
+          id: createdUser8.id, // Assuming user1 was created earlier
+        },
+      },
+    },
+  });
+
+  const t3 = await prisma.ticket.create({
+    data: {
+      title: 'Unresolved Feed Lines',
+      description: ticket3Description,
+      reporter: {
+        connect: {
+          id: createdUser9.id, // Assuming user1 was created earlier
+        },
+      },
+    },
+  });
+
+  const t4 = await prisma.ticket.create({
+    data: {
+      title: 'Comments cannot be Liked',
+      description: ticket4Description,
+      reporter: {
+        connect: {
+          id: createdUser2.id, // Assuming user1 was created earlier
+        },
+      },
+    },
+  });
+
+  const t5 = await prisma.ticket.create({
+    data: {
+      title: 'User Search Raises Error',
+      description: ticket5Description,
+      status: 'RESOLVED',
+      priority: 'MEDIUM',
+      reporter: {
+        connect: {
+          id: createdUser12.id, // Assuming user1 was created earlier
+        },
+      },
+      assignedUsers: {
+        create: [
+          {
+            user: {
+              connect: {
+                id: createdUser5.id, // ID of the assigned user
+              },
+            },
+          },
+          // You can assign more users by adding more objects in this array
+        ],
+      },
+    },
+  });
+
+  const t6 = await prisma.ticket.create({
+    data: {
+      title: 'Comment Send Button disappears',
+      description: ticket6Description,
+      reporter: {
+        connect: {
+          id: createdUser8.id, // Assuming user1 was created earlier
+        },
+      },
+    },
+  });
+
+  const t7 = await prisma.ticket.create({
+    data: {
+      title: 'Links cannot be clicked in comments',
+      description: ticket7Description,
+      reporter: {
+        connect: {
+          id: createdUser15.id, // Assuming user1 was created earlier
+        },
+      },
+    },
+  });
+
+  const t8 = await prisma.ticket.create({
+    data: {
+      title: 'Unresolved DB discrepancies',
+      description: ticket8Description,
+      reporter: {
+        connect: {
+          id: createdUser3.id, // Assuming user1 was created earlier
+        },
+      },
+    },
+  });
+
+  const t9 = await prisma.ticket.create({
+    data: {
+      title: 'Texts too tiny on Listing UI',
+      description: ticket9Description,
+      reporter: {
+        connect: {
+          id: createdUser9.id, // Assuming user1 was created earlier
+        },
+      },
+    },
+  });
+
+  const t10 = await prisma.ticket.create({
+    data: {
+      title: 'Slow Deployments',
+      description: ticket10Description,
       status: 'OPEN',
       priority: 'MEDIUM',
-      reporterId: createdUser13.id,
+      reporter: {
+        connect: {
+          id: createdUser13.id, // Assuming user1 was created earlier
+        },
+      },
     },
   });
 
-  await prisma.ticket.create({
+  const t11 = await prisma.ticket.create({
     data: {
-      title: 'Some Issue',
-      description: issue11Description,
-      reporterId: createdUser8.id,
+      title: 'Console Errors displaying',
+      description: ticket11Description,
       status: 'RESOLVED',
       priority: 'HIGH',
-      assignedToId: createdUser11.id,
+      reporter: {
+        connect: {
+          id: createdUser8.id, // Assuming user1 was created earlier
+        },
+      },
+      assignedUsers: {
+        create: [
+          {
+            user: {
+              connect: {
+                id: createdUser11.id, // ID of the assigned user
+              },
+            },
+          },
+          // You can assign more users by adding more objects in this array
+        ],
+      },
     },
   });
 
-  await prisma.ticket.create({
+  const t12 = await prisma.ticket.create({
     data: {
-      title: 'Twelvth Issue',
-      description: issue12Description,
-      reporterId: createdUser14.id,
+      title: 'Merge Requests Delayed',
+      description: ticket12Description,
+      reporter: {
+        connect: {
+          id: createdUser14.id, // Assuming user1 was created earlier
+        },
+      },
     },
   });
 
-  await prisma.ticket.create({
+  const t13 = await prisma.ticket.create({
     data: {
-      title: 'First Issue',
-      description: issue1Description,
-      reporterId: createdUser15.id,
+      title: 'OAuth not implemented',
+      description: ticket13Description,
+      reporter: {
+        connect: {
+          id: createdUser15.id, // Assuming user1 was created earlier
+        },
+      },
     },
   });
 
-  await prisma.ticket.create({
+  const t14 = await prisma.ticket.create({
     data: {
-      title: 'Second Issue',
-      description: issue2Description,
-      reporterId: createdUser9.id,
+      title: 'Console logs not deleted',
+      description: ticket14Description,
+      reporter: {
+        connect: {
+          id: createdUser9.id, // Assuming user1 was created earlier
+        },
+      },
     },
   });
 
-  await prisma.ticket.create({
+  const t15 = await prisma.ticket.create({
     data: {
-      title: 'First Issue',
-      description: issue1Description,
-      reporterId: createdUser15.id,
+      title: 'No automated tests ceated',
+      description: ticket15Description,
+      reporter: {
+        connect: {
+          id: createdUser15.id, // Assuming user1 was created earlier
+        },
+      },
     },
   });
 
-  await prisma.ticket.create({
+  const t16 = await prisma.ticket.create({
     data: {
-      title: 'Second Issue',
-      description: issue2Description,
-      reporterId: createdUser12.id,
+      title: 'App Crashes',
+      description: ticket16Description,
+      reporter: {
+        connect: {
+          id: createdUser12.id, // Assuming user1 was created earlier
+        },
+      },
     },
   });
 
-  await prisma.ticket.create({
+  const t17 = await prisma.ticket.create({
     data: {
-      title: 'First Issue',
-      description: issue1Description,
-      reporterId: createdUser14.id,
+      title: 'Ambiguous Error messages',
+      description: ticket17Description,
+      reporter: {
+        connect: {
+          id: createdUser14.id, // Assuming user1 was created earlier
+        },
+      },
     },
   });
 
-  await prisma.ticket.create({
+  const t18= await prisma.ticket.create({
     data: {
-      title: 'Second Issue',
-      description: issue2Description,
-      reporterId: createdUser2.id,
+      title: 'Authentication Errors',
+      description: ticket18Description,
+      reporter: {
+        connect: {
+          id: createdUser2.id, // Assuming user1 was created earlier
+        },
+      },
     },
   });
 
-  await prisma.ticket.create({
+  const t19 = await prisma.ticket.create({
     data: {
-      title: 'First Issue',
-      description: issue1Description,
-      reporterId: createdUser14.id,
+      title: 'Sidebar too narrow',
+      description: ticket19Description,
+      reporter: {
+        connect: {
+          id: createdUser14.id, // Assuming user1 was created earlier
+        },
+      },
     },
   });
 
-  await prisma.ticket.create({
+  const t20 = await prisma.ticket.create({
     data: {
-      title: 'Second Issue',
-      description: issue20Description,
-      reporterId: createdUser3.id
+      title: 'Missing Dashboard',
+      description: ticket20Description,
+      reporter: {
+        connect: {
+          id: createdUser3.id, // Assuming user1 was created earlier
+        },
+      },
     },
   });
+
+  console.log('Tickets created:', t1,  t2,  t3,  t4,  t5, 
+                                  t6,  t7,  t8,  t9,  t10,
+                                  t11, t12, t13, t14, t15,
+                                  t16, t17, t18, t19, t20,
+  );
+
+
+// Create team with members
+const team1 = await prisma.team.create({
+  data: {
+    name: 'Development Team',
+    members: {
+      connect: [{ id: createdUser5.id }, { id: createdUser18.id }],
+    },
+  },
+});
+
+const team2 = await prisma.team.create({
+  data: {
+    name: 'Design Team',
+    members: {
+      connect: [{ id: createdUser6.id },{id: createdUser20.id}],
+    },
+  },
+});
+
+const team3 = await prisma.team.create({
+  data: {
+    name: 'Marketing',
+    members: {
+      connect: [{ id: createdUser10.id },{id: createdUser19.id}, {id:createdUser17.id}],
+    },
+  },
+});
+
+const team4 = await prisma.team.create({
+  data: {
+    name: 'Business Development',
+    members: {
+      connect: [{ id: createdUser11.id }],
+    },
+  },
+});
+
+console.log('Tickets created:', team1,  team2,  team3,  team4);
+
+// Assign users to tickets using TicketAssignment
+await prisma.ticketAssignment.create({
+  data: {
+    ticketId: t11.id,
+    userId: createdUser11.id, 
+  },
+});
+
+await prisma.ticketAssignment.create({
+  data: {
+    ticketId: t5.id,
+    userId: createdUser5.id,
+  },
+});
+
+
+
+
+
 }
 
 main()
